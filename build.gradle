@@ -1,0 +1,42 @@
+buildscript {
+
+  dependencies {
+    classpath "io.freefair.gradle:aspectj-plugin:3.1.4"
+  }
+  repositories {
+    jcenter()
+  }
+}
+
+
+plugins {
+  id 'org.springframework.boot' version '2.1.3.RELEASE'
+  id 'java'
+  id 'idea'
+}
+apply plugin: 'io.freefair.aspectj.compile-time-weaving'
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  aspectjLib
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtimeOnly 'com.h2database:h2'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  aspectjLib 'org.springframework:spring-aspects'
+}
+
+tasks.ajcJava {
+    aspectpath.from(configurations.aspectjLib)
+}
